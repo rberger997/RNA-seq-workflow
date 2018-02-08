@@ -17,6 +17,12 @@
 #------------------------------------------------------------
 #                    1_counts_to_dds
 
+# Assign directory to RNA seq folder with alignment files
+dir <- '~/Desktop/RNAseq stuff/Run1822/kallisto-Run_1822'
+
+# Assign output directory for plots and results
+outputdir <- dir.create('~/Desktop/RNAseq stuff/Results/NEWFOLDER')
+
 # Need to import the .tsv output files using tximport
 
 # First set up a gene reference (tx2gene) for annotation from ENSEMBL transcipt IDs to gene IDs
@@ -36,10 +42,7 @@ tx2gene <- Tx[,c(1,7)]
 head(tx2gene)
 
 # File import
-
-# Assign directory to RNA seq folder with alignment files
-dir <- '~/Desktop/RNAseq stuff/Run1822/kallisto-Run_1822'
-
+library(dplyr)
 # Load in sample key.
 # This sample key is all the 8h time samples from run 1822
 setwd('~/Desktop/RNAseq stuff/Run1822/kallisto-Run_1822')
@@ -47,6 +50,19 @@ sample_key <- read.csv('sample_key1.csv') # shoule be 32 obs of 21 variables
 # Optional: filter out samples from the key that you don't wan to analyze
 sample_key <- filter(sample_key, hr == 8) # Only include 8h samples
 sample_key <- sample_key[c(1:4, 13:32), ] # Filter out PMN only, PMN+HIOs samples
+sample_key <- filter(sample_key, code_name %in% c('PBS', 
+                                                  'Styphimurium',
+                                                  'Senteritidis'
+                                                  # 'PBS+PMNs', 
+                                                  # 'Styphimurium+PMNs', 
+                                                  # 'SEnt+PMNs' 
+                                                  # 'PMN', 
+                                                  # 'HIOs+PMNs'
+))
+
+# Record of samples used in the tximport
+txiSamples <- as.vector(unique(sample_key$code_name))
+txiSamples
 
 sample_key$file_name
 # Set up path to read files into tximport

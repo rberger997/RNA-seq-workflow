@@ -28,7 +28,7 @@ sampleDists
 # visualize distances
 library(pheatmap)
 library(RColorBrewer)
-
+# Make sample distance plot
 sampleDistMatrix <- as.matrix(sampleDists)
 head(sampleDistMatrix)
 colors <- colorRampPalette( rev(brewer.pal(9, "Blues")) )(255)
@@ -37,6 +37,23 @@ pheatmap(sampleDistMatrix,
          clustering_distance_cols = sampleDists,
          col = colors)
 
+
 # PCA plot
 plotPCA(rld, intgroup = 'condition')
+
 #------------------------------------------------------------
+# Optional:
+
+# Save sampledist plot as PDF
+sampDistPlot <- recordPlot()  # Run when plot is done
+name <- 'PBS_STM_SE'   #File name - state samples in the plot
+pdf(paste(outputdir,'/',name,'_sampleDistPlot.pdf', sep = ''), width = 6, height = 6, onefile = FALSE)
+sampDistPlot
+dev.off()  # End PDF
+
+# Save PCA plot as PDF
+PCA <- recordPlot()  # Run when PCA plot is done
+name <- 'PBS_STM_SE'   #File name - state samples in the plot
+pdf(paste(outputdir,'/',name,'_PCA_plot.pdf', sep = ''), width = 6, height = 6, onefile = FALSE)
+PCA
+dev.off()  # End PDF

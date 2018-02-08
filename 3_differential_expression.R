@@ -24,7 +24,9 @@ head(dds)
 sampleTable
 
 # Select what samples are being compared to each other
-contrast <- c('condition', 'Senteritidis', 'PBS') # factor name, numerator condition, denominator condition
+sample1 <- 'Senteritidis'
+sample2 <- 'PBS'
+contrast <- c('condition', sample1, sample2) # factor name, numerator condition, denominator condition
 res <- results(dds, contrast = contrast)
 
 res

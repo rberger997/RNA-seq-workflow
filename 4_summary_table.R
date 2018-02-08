@@ -41,4 +41,12 @@ GeneTable <- function(x, p, fc){
 
 GeneSummary <- GeneTable(res.df, 0.05, 1)
 GeneSummary
+
+# Make PDF of table
+pdf(paste(outputdir,'/',sample1,'_over_',sample2,'_GeneSummary.pdf', sep = ''), width = 6, height = 1.5)
+library(gridExtra)
+grid.arrange(tableGrob(GeneSummary))
+dev.off()
 #------------------------------------------------------------
+
+
