@@ -93,3 +93,19 @@ mat1 <- mat1 - rowMeans(mat1)
 IDs <- res[rownames(mat1), 7]
 pheatmap(mat1, annotation_col = anno, labels_row = IDs)
 head(assay(rld))
+
+
+# Set the color scale manually
+# Sets the minimum (0), the maximum (15), and the increasing steps (+1) for the color scale
+# Note: if some of your genes are outside of this range, they will appear white on the heatmap
+breaksList = seq(0, 15, by = 1)
+
+# Plots the first heatmap
+pheatmap(expressionData[1:10, ], # Plots the first 10 genes of the dataset
+         color = colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(length(breaksList)), # Defines the vector of colors for the legend (it has to be of the same lenght of breaksList)
+         breaks = breaksList) # Sets the breaks of the color scale as in breaksList
+
+# Plots the second heatmap with the same color and breaks options
+pheatmap(expressionData[20:30, ], # Plots the third 10 genes of the dataset
+         color = colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(length(breaksList)),
+         breaks = breaksList)
