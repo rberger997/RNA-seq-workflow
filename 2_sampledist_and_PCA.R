@@ -35,25 +35,32 @@ colors <- colorRampPalette( rev(brewer.pal(9, "Blues")) )(255)
 pheatmap(sampleDistMatrix,
          clustering_distance_rows = sampleDists,
          clustering_distance_cols = sampleDists,
-         col = colors)
-
+         col = colors,
+         treeheight_row = 15,
+         treeheight_col = 15)
+sampDistPlot <- recordPlot()
 
 # PCA plot
 plotPCA(rld, intgroup = 'condition')
+PCAplot <- recordPlot()
 
 #------------------------------------------------------------
 # Optional:
 
-# Save sampledist plot as PDF
-sampDistPlot <- recordPlot()  # Run when plot is done
-name <- 'PBS_STM_SE'   #File name - state samples in the plot
-pdf(paste(outputdir,'/',name,'_sampleDistPlot.pdf', sep = ''), width = 6, height = 6, onefile = FALSE)
-sampDistPlot
+# Save plots
+name <- 'PBS_STM'   #File name - state samples in the plot
+save_plot <- PCAplot  # set to the plot object to be saved
+plot_type <- 'PCAplot'
+
+# Save plot as PDF
+pdf(paste(outputdir,'/',name,'_',plot_type,'.pdf', sep = ''), 
+    width = 4, height = 4, onefile = FALSE)
+save_plot
 dev.off()  # End PDF
 
-# Save PCA plot as PDF
-PCA <- recordPlot()  # Run when PCA plot is done
-name <- 'PBS_STM_SE'   #File name - state samples in the plot
-pdf(paste(outputdir,'/',name,'_PCA_plot.pdf', sep = ''), width = 6, height = 6, onefile = FALSE)
-PCA
-dev.off()  # End PDF
+# Save plot as png
+png(filename = file.path(outputdir, paste(name, '_',plot_type,'.png', sep = '')),
+    height = 3, width = 4, units = 'in', res = 500)
+save_plot
+dev.off() # End png
+#------------------------------------------------------------

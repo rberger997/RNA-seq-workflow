@@ -15,16 +15,23 @@
 
 
 #------------------------------------------------------------
-#                    1_counts_to_dds
+#                    Set up directories
 
-# Assign directory to RNA seq folder with alignment files
+# Where are the input (kallisto alignment) files located?
 dir <- '~/Desktop/RNAseq stuff/Run1822/kallisto-Run_1822'
 
-# Assign output directory for plots and results
-outputdir <- dir.create('~/Desktop/RNAseq stuff/Results/NEWFOLDER')
+
+# Where should the output files go?
+output_folderID <- '2.28.18'  # Name of output folder
+
+dir.create(file.path('~/Desktop/RNAseq stuff/Results', output_folderID))  # Optional: Create new folder for output
+outputdir <- file.path('~/Desktop/RNAseq stuff/Results', output_folderID) # Output folder
+setwd(outputdir)  # Change working directory to output folder
+
+#------------------------------------------------------------
+#                    1_counts_to_dds
 
 # Need to import the .tsv output files using tximport
-
 # First set up a gene reference (tx2gene) for annotation from ENSEMBL transcipt IDs to gene IDs
 # source("https://bioconductor.org/biocLite.R")
 # biocLite("EnsDb.Hsapiens.v75")
@@ -37,22 +44,22 @@ Tx <- transcripts(edb,
                   columns = c(listColumns(edb , "tx"), "gene_name"),
                   return.type = "DataFrame")
 head(Tx)
-# assign columns 1 (transcript ID) and 7 (gene ID) to dataframe tx2gene
-tx2gene <- Tx[,c(1,7)]
+# assign columns 1 (transcript ID) and 9 (gene name) to dataframe tx2gene
+tx2gene <- Tx[,c(1,9)]
 head(tx2gene)
 
 # File import
 library(dplyr)
 # Load in sample key.
 # This sample key is all the 8h time samples from run 1822
-setwd('~/Desktop/RNAseq stuff/Run1822/kallisto-Run_1822')
-sample_key <- read.csv('sample_key1.csv') # shoule be 32 obs of 21 variables
+sample_key <- read.csv(file.path(dir,'sample_key1.csv')) # shoule be 32 obs of 21 variables
+
 # Optional: filter out samples from the key that you don't wan to analyze
 sample_key <- filter(sample_key, hr == 8) # Only include 8h samples
 sample_key <- sample_key[c(1:4, 13:32), ] # Filter out PMN only, PMN+HIOs samples
 sample_key <- filter(sample_key, code_name %in% c('PBS', 
-                                                  'Styphimurium',
-                                                  'Senteritidis'
+                                                  'Styphimurium'
+                                                  # 'Senteritidis'
                                                   # 'PBS+PMNs', 
                                                   # 'Styphimurium+PMNs', 
                                                   # 'SEnt+PMNs' 
@@ -93,6 +100,13 @@ nrow(dds) # 35300 total genes
 # Filter out rows with no counts
 dds <- dds[rowSums(counts(dds)) > 1, ]
 nrow(dds) 
+
+# Account for transcript length
+dds <- DESeq2::estimateSizeFactors(dds)
+ddscounts <- DESeq2::counts(dds, normalized = TRUE)
+# Save output file:
+
+write.csv(ddscounts, file = file.path(outputdir, "complete-dataset_DESeq2-normalized-counts.csv"))
 
 ## RNA seq reads are now in a DESeq dataset. End module, proceed to exploratory analysis.
 #------------------------------------------------------------

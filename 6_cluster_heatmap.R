@@ -27,22 +27,27 @@ topVarGenes <- head(order(rowVars(assay(rld)), decreasing = TRUE), num1) # Defin
 mat <- assay(rld)[topVarGenes, ]  # Matrix of the top variance genes from the set
 mat <- mat - rowMeans(mat)  # expression is relative to mean of all samples. (fold over mean of all samples)
 anno <- as.data.frame(colData(rld))  # sample IDs for annotation
-topVarGeneIDs <- res[rownames(mat), 7]  # Gene labels as symbols
 # Heatmap
-pheatmap(mat, annotation_col = anno, labels_row = topVarGeneIDs)
+pheatmap(mat, annotation_col = anno)
 
 #------------------------------------------------------------
 ## Heatmap options
 
 
 # Save heatmap as PDF
-hmap <- recordPlot() # Run after plot is finished
+heatmap <- recordPlot() # Run after plot is finished
 # Pick title format
 GeneSetTitle <- 'MT genes' # Title of subset for heatmap
 GeneSetTitle <- paste('Top',num1,'VarianceGenes', sep = '') # Title of subset for heatmap
 pdf(paste(outputdir,'/',sample1,'_over_',sample2,'-',GeneSetTitle,'-heatmap.pdf',sep = ''), width = 5, height = 6, onefile = FALSE)
-hmap
+heatmap
 dev.off() # End PDF
+
+# Save heatmap as png
+png(filename = file.path(outputdir, paste(sample1, '_over_',sample2,GeneSetTitle,'_heatmap.png', sep = '')),
+    height = 6, width = 5, units = 'in', res = 500)
+heatmap
+dev.off()
 
 
 ## Make heatmap from a subset of samples in the dataset
@@ -55,9 +60,8 @@ topVarGenes <- head(order(rowVars(maty), decreasing = TRUE), num1) # Define top 
 mat <- maty[topVarGenes,] # Select the top variance genes from the set
 mat <- mat - rowMeans(mat) # expression is relative to mean of all samples
 anno <- as.data.frame(colData(rld)) # sample IDs for annotation
-topVarGeneIDs <- res[rownames(mat), 7] # Gene labels as symbols
 # Heatmap of the 20 genes with the highest variance between samples
-pheatmap(mat, annotation_col = anno, labels_row = topVarGeneIDs)
+pheatmap(mat, annotation_col = anno)
 
 
 

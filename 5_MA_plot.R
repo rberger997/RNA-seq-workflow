@@ -28,6 +28,11 @@ pdf(paste(outputdir,'/',sample1,'_over_',sample2,'_MAplot.pdf', sep = ''), width
 MAplot
 dev.off()
 
+# Save MA plot as png
+png(filename = file.path(outputdir, paste(sample1, '_over_',sample2,'_MAplot.png', sep = '')),
+    height = 1.5, width = 6, units = 'in', res = 500)
+MAplot
+dev.off()
 
 ## Labeling options:
 

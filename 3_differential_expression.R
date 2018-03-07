@@ -24,7 +24,7 @@ head(dds)
 sampleTable
 
 # Select what samples are being compared to each other
-sample1 <- 'Senteritidis'
+sample1 <- 'Styphimurium'
 sample2 <- 'PBS'
 contrast <- c('condition', sample1, sample2) # factor name, numerator condition, denominator condition
 res <- results(dds, contrast = contrast)
@@ -38,25 +38,25 @@ library(org.Hs.eg.db)
 columns(org.Hs.eg.db)
 
 # Add column for gene symbol
-res$symbol <- mapIds(org.Hs.eg.db,
-                     keys = row.names(res),
-                     column = 'SYMBOL',
-                     keytype = 'ENSEMBL',
-                     multiVals = 'first')
+res$symbol <- rownames(res)
 # Add column for gene Entrez ID
 res$entrez <- mapIds(org.Hs.eg.db,
                      keys = rownames(res),
                      column = 'ENTREZID',
-                     keytype = 'ENSEMBL',
+                     keytype = 'SYMBOL',
                      multiVals = 'first')
 # Add column for gene name
 res$name <- mapIds(org.Hs.eg.db,
-                     keys = rownames(res),
-                     column = 'GENENAME',
-                     keytype = 'ENSEMBL',
-                     multiVals = 'first')
+                   keys = rownames(res),
+                   column = 'GENENAME',
+                   keytype = 'SYMBOL',
+                   multiVals = 'first')
 # Make results dataframe
 res.df <- as.data.frame(res)
+res.df <- res.df[order(res.df$padj),]
+head(res.df)
 
+# Save output file
+write.csv(res.df, file = paste(outputdir,'/',sample1,'_over_', sample2,'_diff_expression.csv', sep = ''))
 # End module. Proceed to gene summary table, MA plot, heatmaps, etc.
 #------------------------------------------------------------
