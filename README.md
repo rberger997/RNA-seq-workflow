@@ -17,4 +17,4 @@ Gene-level results:
  - GSEA using Reactome pathways
  - Clustered heatmaps of global pathway changes
  
-To view examples of the workflow outputs, view html examples of these scripts in the `src_html_output` folder.
+To view examples of the workflow outputs, see the html files in the `src_html_output` folder.
