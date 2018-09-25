@@ -1,12 +1,18 @@
 # RNA-seq-workflow
 
-This is a simple workflow to do analysis on RNA seq data and make some plots. The input is the Kallisto alignment result (.tsv) files and following the workflow in order will generate:
- - Differential expression dataframes (.csv output)
- - Summary table of gene changes
- - Principal component (PCA) plot
- - Sample distance plot
- - Mean average (MA) plot
- - Volcano plot
- - Heatmap of the top n variance genes
- - Pathway enrichment using GO
+This is a computational workflow for processing and analyzing RNA sequencing data. The input data are genome alignment result files (in this case .tsv or .h5 files from Kallisto). Following the workflow in sequential order will generate the following outputs:
+
+Gene-level results:
+ - Matrix containing normalized counts for all genes in the genome 
+ - Differential expression dataframes (.csv output) comparing gene expression between samples
+ - Principal component analysis (PCA) plot of all samples
+ - Summary table of gene changes based on selection criteria
+ - Clustered heatmap of differential expression results
+ - Volcano plots of differential expression results
+ - Interactive volcano plots
+ 
+ Pathway-level results:
+ - Gene set enrichment analysis (GSEA) using MSigDB Hallmark pathways
+ - GSEA using Reactome pathways
+ - Clustered heatmaps of global pathway changes
  
