@@ -19,8 +19,9 @@
 # Function to make RNA seq summary table
 # Input is: dataframe, p value cutoff, log2fold change cutoff
 GeneTable <- function(x, p, fc){
+  library(dplyr)
   x <- x[order(x$padj),] # sort by lowest adj p value
-  x <- x[!is.na(x$symbol),] # Remove transcripts with NA gene associated
+  #x <- x[!is.na(x$symbol),] # Remove transcripts with NA gene associated
   rowIDs <- c('Total genes with counts',
               paste('Adjusted p value <', p),
               paste('Adj. p <', p, '& log2 Fold Change >', fc))
@@ -39,7 +40,7 @@ GeneTable <- function(x, p, fc){
   rownames(subsetTable) <- rowIDs
   subsetTable
 }
-
+res.df <- as.data.frame(res)
 GeneSummary <- GeneTable(res.df, 0.05, 1)
 GeneSummary
 
