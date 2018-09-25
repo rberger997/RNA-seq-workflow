@@ -10,6 +10,7 @@ Gene-level results:
  - Clustered heatmap of differential expression results
  - Volcano plots of differential expression results
  - Interactive volcano plots
+ - Area proportional Venn diagrams (Euler diagrams) comparing gene changes between samples 
  
  Pathway-level results:
  - Gene set enrichment analysis (GSEA) using MSigDB Hallmark pathways
